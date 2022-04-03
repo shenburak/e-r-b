@@ -1,5 +1,5 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
+import icon from '../../assets/cla_logo.png';
 import './App.css';
 
 const Hello = () => {
@@ -8,32 +8,19 @@ const Hello = () => {
       <div className="Hello">
         <img width="200px" alt="icon" src={icon} />
       </div>
-      <h1>electron-react-boilerplate</h1>
+      <center>
+        <h1>CutLang GUI</h1>
+      </center>
       <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
+        <button
+          type="button"
+          onClick={() => window.electron.ipcRenderer.downloadWithDocker()}
         >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
+          <span role="img" aria-label="books">
+            🐳
+          </span>
+          Download with docker
+        </button>
       </div>
     </div>
   );

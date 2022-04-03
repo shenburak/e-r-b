@@ -12,6 +12,7 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { spawn } from 'child_process';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -29,6 +30,37 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.on('download-with-docker', async (event, arg) => {
+  const ls = spawn(
+    'docker',
+    [
+      'run',
+      '-p 8888:8888',
+      '-d',
+      `-v "${process.cwd()}/:/src"`,
+      '--name CutLang',
+      'cutlang/cutlang',
+    ],
+    { shell: true }
+  );
+
+  ls.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`);
+  });
+
+  ls.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`);
+  });
+
+  ls.on('error', (error) => {
+    console.log(`error: ${error.message}`);
+  });
+
+  ls.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
 });
 
 if (process.env.NODE_ENV === 'production') {
